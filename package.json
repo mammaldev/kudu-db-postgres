@@ -7,7 +7,11 @@
     "test": "mocha test/ -R spec --recursive --compilers es6:babel/register"
   },
   "main": "lib/kudu-db-postgres.js",
-  "dependencies": {},
+  "dependencies": {
+    "core-js": "^0.9.8",
+    "pg": "^4.3.0",
+    "pg-native": "^1.8.1"
+  },
   "devDependencies": {
     "babel": "^5.1.10",
     "babel-eslint": "^3.0.1",
