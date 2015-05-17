@@ -12,6 +12,10 @@ export default class PostgresAdapter {
       // for each row (model instance) should be stored.
       idColumn: 'id',
 
+      // A PostgreSQL client. Most consumers won't need this option but it is
+      // useful for mocking the client in tests.
+      client: pg,
+
       // Returns the name of the database table responsible for instances of
       // the given model type. Defaults to the plural name of the model.
       getTableNameFromModel: ( model ) => model.constructor.plural,
@@ -46,7 +50,7 @@ export default class PostgresAdapter {
     }
 
     this.kudu = kudu;
-    this.pg = pg;
+    this.client = this.config.client;
   }
 
   // Insert a new model instance into the database. Returns the same instance
@@ -100,7 +104,9 @@ export default class PostgresAdapter {
   getClient() {
     return new Promise(( resolve, reject ) => {
 
-      pg.connect(this.config.connectionString, ( err, client, done ) => {
+      let config = this.config;
+
+      config.client.connect(config.connectionString, ( err, client, done ) => {
 
         if ( err ) {
           return reject(err);
