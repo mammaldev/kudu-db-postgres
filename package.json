@@ -16,6 +16,7 @@
     "babel": "^5.1.10",
     "babel-eslint": "^3.0.1",
     "chai": "^2.1.2",
+    "chai-as-promised": "^5.0.0",
     "eslint": "^0.15.1",
     "mocha": "^2.0.1"
   }

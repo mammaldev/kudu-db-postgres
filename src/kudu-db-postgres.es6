@@ -33,8 +33,11 @@ export default class PostgresAdapter {
         // Ignore the 'type' property. By default the type is inferred from the
         // name of the table.
         let index = columns.indexOf('type');
-        columns.splice(index, 1);
-        values.splice(index, 1);
+
+        if ( index > -1 ) {
+          columns.splice(index, 1);
+          values.splice(index, 1);
+        }
 
         return [ columns, values ];
       },
