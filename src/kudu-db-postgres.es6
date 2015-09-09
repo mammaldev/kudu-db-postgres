@@ -112,7 +112,7 @@ export default class PostgresAdapter {
       // containing the unique identifier requested.
       let table = Model.plural;
       let query = `SELECT * FROM "${ table }" WHERE ${ this.config.idColumn }=$1`;
-      let values = [ id, ];
+      let values = [ id ];
 
       return new Promise(( resolve, reject ) => {
 
