@@ -8,7 +8,7 @@
   },
   "main": "lib/kudu-db-postgres.js",
   "dependencies": {
-    "core-js": "^0.9.8",
+    "core-js": "^1.0.0",
     "pg": "^4.3.0",
     "pg-native": "^1.8.1"
   },
