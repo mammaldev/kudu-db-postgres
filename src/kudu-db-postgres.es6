@@ -101,6 +101,76 @@ export default class PostgresAdapter {
     });
   }
 
+  // Get the row representing the model instance of the given type with the
+  // given unique identifier.
+  get( Model, id ) {
+
+    return this.getClient()
+    .then(( [ client, done ] ) => {
+
+      // Build the query itself. The query retrieves all columns from the row
+      // containing the unique identifier requested.
+      let table = Model.plural;
+      let query = `SELECT * FROM "${ table }" WHERE ${ this.config.idColumn }=$1`;
+      let values = [ id, ];
+
+      return new Promise(( resolve, reject ) => {
+
+        client.query(query, values, ( err, res ) => {
+
+          // Release the database connection back to the pool, regardless of
+          // whether the query succeeded or failed.
+          done();
+
+          if ( err ) {
+            return reject(err);
+          }
+
+          // The client exposes the data as an object with keys representing
+          // column names. We need to add the 'type' property which is required
+          // by Kudu.
+          let instance = res.rows[ 0 ];
+          instance.type = type;
+
+          return resolve(instance);
+        });
+      });
+    });
+  }
+
+  // Get all the rows representing model instances of the given type.
+  getAll( Model ) {
+
+    return this.getClient()
+    .then(( [ client, done ] ) => {
+
+      // Build the query. It retrieves all columns from all rows of the given
+      // table.
+      let table = Model.plural;
+      let query = `SELECT * FROM "${ table }"`;
+
+      return new Promise(( resolve, reject ) => {
+
+        client.query(query, ( err, res ) => {
+
+          // Release the database connection back to the pool.
+          done();
+
+          if ( err ) {
+            return reject(err);
+          }
+
+          // Map the database rows to objects that Kudu will interpret as model
+          // instances.
+          return resolve(res.rows.map(( row ) => {
+            row.type = Model.singular;
+            return row;
+          }));
+        });
+      });
+    });
+  }
+
   // Get a connection to the database from the pool. When the connection has
   // done its job the 'done' callback should be invoked to return that
   // conection to the pool.
