@@ -12,6 +12,10 @@ mock.connect = ( connectionString, cb ) => {
     // Arguments: query string, values array, callback function.
     query( query, values, cb ) {
 
+      if ( typeof values === 'function' ) {
+        cb = values;
+      }
+
       if ( /^INSERT/.test(query) ) {
         return cb(null, {
           rows: [ { id: 1 } ],

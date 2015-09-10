@@ -95,16 +95,33 @@ describe('Kudu PostgreSQL adapter', () => {
   describe('#get', () => {
 
     it('should return a single row when given a valid model and identifier', () => {
-      let Model = () => {};
-      Model.singular = 'test';
-      Model.plural = 'tests';
+      let Model = makeMockModel('test', 'tests');
       return expect(adapter.get(Model, 1)).to.eventually.have.property('type', 'test');
     });
 
     it('should return an error if the client throws', () => {
-      let Model = () => {};
-      Model.plural = 'fails';
+      let Model = makeMockModel('fail', 'fails');
       return expect(adapter.get(Model, 1)).to.eventually.be.rejectedWith(Error);
     });
   });
+
+  describe('#getAll', () => {
+
+    it('should return an array when given a valid model', () => {
+      let Model = makeMockModel('test', 'tests');
+      return expect(adapter.getAll(Model)).to.eventually.be.an('array');
+    });
+
+    it('should return an error if the client throws', () => {
+      let Model = makeMockModel('fail', 'fails');
+      return expect(adapter.getAll(Model)).to.eventually.be.rejectedWith(Error);
+    });
+  });
 });
+
+function makeMockModel( singular, plural ) {
+  let Model = () => {};
+  Model.singular = singular;
+  Model.plural = plural;
+  return Model;
+}
