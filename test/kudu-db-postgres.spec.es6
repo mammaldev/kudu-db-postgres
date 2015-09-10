@@ -91,4 +91,20 @@ describe('Kudu PostgreSQL adapter', () => {
       return expect(adapter.create(instance)).to.eventually.have.property('_id');
     });
   });
+
+  describe('#get', () => {
+
+    it('should return a single row when given a valid model and identifier', () => {
+      let Model = () => {};
+      Model.singular = 'test';
+      Model.plural = 'tests';
+      return expect(adapter.get(Model, 1)).to.eventually.have.property('type', 'test');
+    });
+
+    it('should return an error if the client throws', () => {
+      let Model = () => {};
+      Model.plural = 'fails';
+      return expect(adapter.get(Model, 1)).to.eventually.be.rejectedWith(Error);
+    });
+  });
 });

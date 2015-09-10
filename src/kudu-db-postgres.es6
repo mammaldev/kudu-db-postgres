@@ -130,7 +130,7 @@ export default class PostgresAdapter {
           // column names. We need to add the 'type' property which is required
           // by Kudu.
           let instance = res.rows[ 0 ];
-          instance.type = type;
+          instance.type = Model.singular;
 
           return resolve(instance);
         });

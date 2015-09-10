@@ -17,6 +17,19 @@ mock.connect = ( connectionString, cb ) => {
           rows: [ { id: 1 } ],
         });
       }
-    }
+
+      if ( /^SELECT/.test(query) ) {
+
+        if ( /"fails"/.test(query) ) {
+          return cb(new Error());
+        }
+
+        return cb(null, {
+          rows: [ { id: 1 } ],
+        });
+      }
+
+      return cb(new Error('Not implemented in mock.'));
+    },
   }, () => {});
 };
